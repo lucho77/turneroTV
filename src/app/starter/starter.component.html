@@ -1,0 +1,43 @@
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                        <div class="card">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-info">
+                                        <thead class="bg-info text-white">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Codigo</th>
+                                                <th scope="col">Afiliado</th>
+                                                <th scope="col">Lugar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor ="let d of data; let io = index ">
+                                                <th scope="row">{{io}}</th>
+                                                <td>G{{io}}</td>
+                                                <td>{{d[0].value}}</td>
+                                                <td>{{d[2].value}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                        </div>
+                </div>
+            </div>
+    </div>
+    
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="video-player-wrapper">
+                    <vg-player (onPlayerReady)="videoPlayerInit($event)" >                   
+                        <video #media [vgMedia]="$any(media)" [src]="currentVideo.src" id="singleVideo" autoplay preload="auto" crossorigin> </video>
+                    </vg-player>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
