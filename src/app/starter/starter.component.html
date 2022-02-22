@@ -34,7 +34,7 @@
 
                 <div class="video-player-wrapper">
                     <vg-player (onPlayerReady)="videoPlayerInit($event)" >                   
-                        <video #media [vgMedia]="$any(media)" [src]="currentVideo.src" id="singleVideo" autoplay preload="auto" crossorigin> </video>
+                        <video #media [vgMedia]="$any(media)" [src]="currentVideo" id="singleVideo" autoplay preload="auto" crossorigin> </video>
                     </vg-player>
               </div>
             </div>
