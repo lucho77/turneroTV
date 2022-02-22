@@ -37,8 +37,8 @@ export class StarterComponent implements OnInit, AfterViewInit {
     .subscribe(
       response => {
         this.user = response;
-        this.consultarVideos(this.putDataFinder('devuelveVideos'));
         localStorage.setItem('currentUser', JSON.stringify(this.user));
+        this.consultarVideos(this.putDataFinder('devuelveVideos'));
         this.subscription = this.everyFiveSeconds.subscribe(() => {
           console.log('traigo los datos turno cada 10 segundos');
           this.consultarTurnos(this.putDataFinder('devuelveTurnero'));
