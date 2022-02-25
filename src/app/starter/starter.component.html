@@ -9,7 +9,6 @@
                                             <tr>
                                                 <th scope="col">#</th>
                                                 <th scope="col">Codigo</th>
-                                                <th scope="col">Afiliado</th>
                                                 <th scope="col">Lugar</th>
                                             </tr>
                                         </thead>
@@ -17,8 +16,7 @@
                                             <tr *ngFor ="let d of data; let io = index ">
                                                 <th scope="row">{{io}}</th>
                                                 <td>G{{io}}</td>
-                                                <td>{{d[0].value}}</td>
-                                                <td>{{d[2].value}}</td>
+                                                <td>{{d[1].value}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
