@@ -30,11 +30,14 @@
         <div class="card">
             <div class="card-body">
 
-                <div class="video-player-wrapper">
-                    <vg-player (onPlayerReady)="videoPlayerInit($event)" >                   
-                        <video #media [vgMedia]="$any(media)" [src]="currentVideo" id="singleVideo" autoplay preload="auto" crossorigin> </video>
-                    </vg-player>
-              </div>
+                <div *ngIf="cargado" class="video-player-wrapper">
+
+              <video   #videoPlayer muted autoplay oncanplay="this.play()"  (ended)="nextVideo()" onloadedmetadata="this.muted = true" controls="controls" width="600px" height="600px">
+                <source [src]="src" type ="video/mp4">
+                Your browser does not support the HTML5 Video element.
+            </video>
+        </div>
+
             </div>
         </div>
     </div>

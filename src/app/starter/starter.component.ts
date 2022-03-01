@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, Subscription, timer } from 'rxjs';
 import { FinderGenericDTO } from '../model/finderGenericDTO';
@@ -22,6 +22,11 @@ export class StarterComponent implements OnInit, AfterViewInit {
   everyFiveSeconds: Observable<number> = timer(0, 10000);
   everyTenMinutes: Observable<number> = timer(0, 600000);
   currentVideo:any;
+  type='video/mp4';
+  cargado = false;
+  src:any;
+  @ViewChild('videoPlayer') videoplayer: ElementRef;
+
   constructor(private reportdefService: ReportdefService, private sanitizer: DomSanitizer) {
     this.subtitle = 'This is some text within a card block.';
   }
@@ -38,7 +43,15 @@ export class StarterComponent implements OnInit, AfterViewInit {
       response => {
         this.user = response;
         localStorage.setItem('currentUser', JSON.stringify(this.user));
-        this.consultarVideos(this.putDataFinder('devuelveVideos'));
+
+        this.subscription2 = this.everyTenMinutes.subscribe(() => {
+          console.log('traigo videos cada 10 minutos');
+          this.consultarVideos(this.putDataFinder('devuelveVideos'));
+      },
+      error => {
+        console.log(error);
+      });
+    
         this.subscription = this.everyFiveSeconds.subscribe(() => {
           console.log('traigo los datos turno cada 10 segundos');
           this.consultarTurnos(this.putDataFinder('devuelveTurnero'));
@@ -48,13 +61,6 @@ export class StarterComponent implements OnInit, AfterViewInit {
       });
     });
 
-    this.subscription2 = this.everyTenMinutes.subscribe(() => {
-      console.log('traigo videos cada 10 minutos');
-      this.consultarVideos(this.putDataFinder('devuelveVideos'));
-  },
-  error => {
-    console.log(error);
-  });
 
   }
   ngOnDestroy() {
@@ -65,7 +71,7 @@ export class StarterComponent implements OnInit, AfterViewInit {
     this.reportdefService.consultarAbmGeneric(this.user!,finder)
     .subscribe(
       response => {
-        console.log('trajo el tabular');
+        console.log('trajo los turnos');
         this.data = response.data;
       },
       error => {
@@ -77,7 +83,7 @@ export class StarterComponent implements OnInit, AfterViewInit {
     this.reportdefService.consultarAbmGeneric(this.user!,finder)
     .subscribe(
       response => {
-        //console.log('trajo el tabular');
+        console.log('trajo los videos');
         
 
         if(response.data.length > 0 ){
@@ -86,9 +92,12 @@ export class StarterComponent implements OnInit, AfterViewInit {
           for (let i = 0; i < response.data.length; i++) {
             this.devuelveUrl(response.data[i][1].value);
           }
+          this.cargado = true;
+         // this.src = 'assets/video/video2.mp4'
           if(this.currentVideo === undefined){
             this.startPlaylistVdo(0,this.videos[0]);
           }
+
         }
 
 
@@ -110,6 +119,12 @@ export class StarterComponent implements OnInit, AfterViewInit {
     this.videos.push(url);
 
   }
+  devuelveUrl2(src:any){
+    this.videos.push(src);
+
+  }
+
+
   putDataFinder(method: string){
     const finder = {} as FinderParamsDTO;
     //finder.methodName = 'devuelveTurnero';
@@ -145,6 +160,10 @@ export class StarterComponent implements OnInit, AfterViewInit {
       this.activeIndex = 0;
     }
     this.currentVideo = this.videos[this.activeIndex];
+    this.src = this.currentVideo;
+    this.videoplayer.nativeElement.load();
+    this.videoplayer.nativeElement.play();
+
   }
   initVdo() {
     this.dataVideo.play();
@@ -152,5 +171,6 @@ export class StarterComponent implements OnInit, AfterViewInit {
   startPlaylistVdo(item: any, index: any) {
     this.activeIndex = item;
     this.currentVideo = index;
+    this.src = index;
   }
 }
