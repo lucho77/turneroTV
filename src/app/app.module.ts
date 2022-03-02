@@ -35,6 +35,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
+import { ParamComponent } from './layouts/paramComponent';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -53,6 +54,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SpinnerComponent,
     FullComponent,
     BlankComponent,
+    ParamComponent,
     VerticalNavigationComponent,
     BreadcrumbComponent,
     VerticalSidebarComponent,

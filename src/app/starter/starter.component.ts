@@ -36,9 +36,13 @@ export class StarterComponent implements OnInit, AfterViewInit {
     //this.videos.push({id:2,src:'assets/video/video2.mp4',type:'video/mp4',name:'video2'});
     //this.currentVideo = this.videos[this.activeIndex];
 
+  //  localStorage.setItem('currentUser', JSON.stringify(this.user));
     
-    
-    this.reportdefService.login('mnsg','xmnsg')
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    console.log('usuario');
+    console.log(usuario);
+
+    this.reportdefService.login(usuario.user,usuario.pass)
     .subscribe(
       response => {
         this.user = response;
