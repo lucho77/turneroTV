@@ -32,12 +32,7 @@ export class StarterComponent implements OnInit, AfterViewInit {
   }
   ngOnInit(): void {
     this.videos = [];
-    //this.videos.push({id:1,src:'assets/video/video1.mp4',type:'video/mp4',name:'video1'});
-    //this.videos.push({id:2,src:'assets/video/video2.mp4',type:'video/mp4',name:'video2'});
-    //this.currentVideo = this.videos[this.activeIndex];
-
-  //  localStorage.setItem('currentUser', JSON.stringify(this.user));
-    
+    localStorage.removeItem('currentUser');
     const usuario = JSON.parse(localStorage.getItem('usuario'));
     console.log('usuario');
     console.log(usuario);
