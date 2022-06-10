@@ -1,4 +1,33 @@
-<div class="row">
+<div class="row" *ngIf="!turnero">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Configuracion Turnero</h4>
+                <div *ngIf="msg" class="alert alert-danger">{{ msg }}</div>
+
+                <form class="m-t-30" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <label for="name">Usuario</label>
+                        <input type="text"  formControlName="username" class="form-control" id="name" aria-describedby="nameHelp"  required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" formControlName="password" class="form-control" id="password"  required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gla">Grupo Lugar Atencion</label>
+                        <input type="number" formControlName="gla" class="form-control" id="gla" aria-describedby="glaHelp"  required>
+                    </div>
+                    <button type="submit" class="btn btn-primary"  [disabled]="!loginForm.valid">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row" *ngIf="turnero" >
     <div class="col-6">
         <div class="card">
             <div class="card-body">
@@ -7,16 +36,14 @@
                                     <table class="table table-hover table-info">
                                         <thead class="bg-info text-white">
                                             <tr>
-                                                <th scope="col">#</th>
                                                 <th scope="col">Codigo</th>
                                                 <th scope="col">Lugar</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor ="let d of data; let io = index ">
-                                                <th scope="row">{{io}}</th>
                                                 <td>{{d[0].value}}</td>
-                                                <td>{{d[1].value}}</td>
+                                                <td>{{d[2].value}}</td>
                                             </tr>
                                         </tbody>
                                     </table>

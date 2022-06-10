@@ -12,5 +12,6 @@
     aplicacion: string| undefined;
     usuarioMesa: boolean| undefined;
     mail:string| undefined;
+    gla:number| undefined;
 }
 

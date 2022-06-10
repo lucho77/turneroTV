@@ -10,8 +10,8 @@ export class ReportdefService {
     constructor(private http: HttpClient) { }
      devolverProyecto () {
         //const api = 'https://online1.sfssa.com.ar/SFSFrameworkRest/api/framework/dina';
-        const api = 'http://192.168.20.253:8080/SFSFrameworkRest/api/framework/dina';
-        //const api = 'api/framework/dina';
+       // const api = 'http://192.168.20.253:8080/SFSFrameworkRest/api/framework/dina';
+        const api = 'api/framework/dina';
         return api;
     }
     

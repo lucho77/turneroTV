@@ -2,6 +2,7 @@ import { Component, AfterViewInit, EventEmitter, Output } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { TranslateService } from '@ngx-translate/core';
+import { TurneroGlobalService } from 'src/app/service/turneroGlobalService';
 
 declare var $: any;
 
@@ -16,10 +17,13 @@ export class VerticalNavigationComponent implements AfterViewInit {
 
   public showSearch = false;
 
-  constructor(private modalService: NgbModal, private translate: TranslateService) {
+  constructor(private modalService: NgbModal, private translate: TranslateService, public tService:TurneroGlobalService) {
 
     translate.setDefaultLang('en');
 
+  }
+  configurar(){
+    this.tService.setearTurnoGlobal(false);
   }
 
   // This is for Notifications

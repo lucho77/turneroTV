@@ -1,4 +1,5 @@
 import { Component, AfterViewInit, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, Subscription, timer } from 'rxjs';
 import { FinderGenericDTO } from '../model/finderGenericDTO';
@@ -6,6 +7,7 @@ import { FinderParamsDTO } from '../model/finderParamsDTO';
 import { FormdataReportdef } from '../model/formdata';
 import { User } from '../model/user';
 import { ReportdefService } from '../service/reportdef.service';
+import { TurneroGlobalService } from '../service/turneroGlobalService';
 
 @Component({
   templateUrl: './starter.component.html'
@@ -25,45 +27,107 @@ export class StarterComponent implements OnInit, AfterViewInit {
   type='video/mp4';
   cargado = false;
   src:any;
+  turnero:boolean;
+  loginForm: FormGroup;
+  msg: string;
+  private turneroRef: Subscription = null;
+
   @ViewChild('videoPlayer') videoplayer: ElementRef;
 
-  constructor(private reportdefService: ReportdefService, private sanitizer: DomSanitizer) {
+  constructor(private reportdefService: ReportdefService, private sanitizer: DomSanitizer,
+    private formBuilder: FormBuilder, public tService:TurneroGlobalService) {
     this.subtitle = 'This is some text within a card block.';
   }
-  ngOnInit(): void {
-    this.videos = [];
-    localStorage.removeItem('currentUser');
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
-    console.log('usuario');
-    console.log(usuario);
 
-    this.reportdefService.login(usuario.user,usuario.pass)
-    .subscribe(
-      response => {
-        this.user = response;
-        localStorage.setItem('currentUser', JSON.stringify(this.user));
+  private cargarForm() {
+    this.loginForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', Validators.compose([Validators.required,Validators.minLength(4), Validators.maxLength(24)])],
+      gla:['', Validators.required]
+    });
+  }
+ 
 
-        this.subscription2 = this.everyTenMinutes.subscribe(() => {
-          console.log('traigo videos cada 10 minutos');
-          this.consultarVideos(this.putDataFinder('devuelveVideos'));
-      },
-      error => {
-        console.log(error);
-      });
-    
-        this.subscription = this.everyFiveSeconds.subscribe(() => {
-          console.log('traigo los datos turno cada 10 segundos');
-          this.consultarTurnos(this.putDataFinder('devuelveTurnero'));
-      },
-      error => {
-        console.log(error);
-      });
+  onSubmit() {
+      this.getLogin();
+  }
+
+  get f() { return this.loginForm.controls; }
+
+
+  getTurnosAndVideos(){
+    this.subscription = this.everyFiveSeconds.subscribe(() => {
+      console.log('traigo los datos turno cada 10 segundos');
+      this.consultarTurnos(this.putDataFinder('devuelveTurnero'));
+    },
+    error => {
+    console.log(error);
     });
 
+    this.subscription2 = this.everyTenMinutes.subscribe(() => {
+      console.log('traigo videos cada 10 minutos');
+      this.consultarVideos(this.putDataFinder('devuelveVideos'));
+    },
+      error => {
+      console.log(error);
+    });
+
+  }
+  getLogin(){
+    this.reportdefService.login( this.f.username.value, this.f.password.value)
+    .subscribe(
+      response => {
+        this.turnero = true;
+        this.user = response;
+        this.user.gla = this.f.gla.value;
+        localStorage.setItem('currentUser', JSON.stringify(this.user));
+        this.getTurnosAndVideos();
+    } ,
+    error => {
+    console.log(error);
+    if (error.error.errorBusiness) {
+      // es un error
+      this.msg = error.error.mensaje;
+
+      return;
+  } else {
+      this.msg = 'error grave al tratar de loguearse, vuelva a intentarlo';
+      return;
+
+  }
+
+  });
+
+
+  }
+
+
+  ngOnInit(): void {
+    this.videos = [];
+    const current = localStorage.getItem('currentUser');
+    if(current == undefined){
+        this.turnero = false
+        this.cargarForm();
+    }else{
+      this.user = JSON.parse(current);
+      this.turnero = true;
+      this.getTurnosAndVideos();
+    }
+
+    this.turneroRef = this.tService.turneroChanged$.subscribe(() => {
+      this.turnero = this.tService.getTurne();
+      this.cargarForm();
+      this.subscription!.unsubscribe();
+      this.subscription2!.unsubscribe();
+  
+    });
 
   }
   ngOnDestroy() {
     this.subscription!.unsubscribe();
+    this.subscription2!.unsubscribe();
+    this.turneroRef.unsubscribe();
+
   }
 
   consultarTurnos(finder:any){
@@ -125,6 +189,8 @@ export class StarterComponent implements OnInit, AfterViewInit {
 
 
   putDataFinder(method: string){
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
     const finder = {} as FinderParamsDTO;
     //finder.methodName = 'devuelveTurnero';
     finder.methodName = method;
@@ -134,8 +200,8 @@ export class StarterComponent implements OnInit, AfterViewInit {
 
     const listNew: FormdataReportdef[] = [];
     const param = {} as FormdataReportdef;
-    param.valueNew = 362;  
-    param.value = 362;
+    param.valueNew = currentUser.gla;  
+    param.value = currentUser.gla;
     param.name = 'p1';
     param.type = 'java.lang.Long';
     param.entity = false;
