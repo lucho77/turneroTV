@@ -33,6 +33,7 @@
             "styles": [
               "src/assets/scss/style.scss",
               "src/styles.scss",
+              "./node_modules/ngx-toastr/toastr.css",
               "./node_modules/@videogular/ngx-videogular/fonts/videogular.css"
 
             ],

@@ -16,7 +16,14 @@
                     </div>
                     <div class="form-group">
                         <label for="gla">Grupo Lugar Atencion</label>
-                        <input type="number" formControlName="gla" class="form-control" id="gla" aria-describedby="glaHelp"  required>
+                        <input type="number" formControlName="gla" class="form-control" id="gla" aria-describedby="glaHelp">
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" formControlName="sla" type="checkbox"  id="flexCheckChecked">
+                        <label class="form-check-label"  for="flexCheckChecked">
+                          Sin lugar de atención
+                        </label>
+                      
                     </div>
                     <button type="submit" class="btn btn-primary"  [disabled]="!loginForm.valid">Submit</button>
                 </form>
@@ -28,7 +35,7 @@
 
 
 <div class="row" *ngIf="turnero" >
-    <div class="col-6">
+    <div class="col" *ngIf="!soloVideo">
         <div class="card">
             <div class="card-body">
                         <div class="card">
@@ -53,7 +60,7 @@
             </div>
     </div>
     
-    <div class="col-6">
+    <div class="col">
         <div class="card">
             <div class="card-body">
 

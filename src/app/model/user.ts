@@ -13,5 +13,6 @@
     usuarioMesa: boolean| undefined;
     mail:string| undefined;
     gla:number| undefined;
+    sla:boolean;
 }
 
