@@ -25,6 +25,13 @@
                         </label>
                       
                     </div>
+                    <div class="form-check">
+                        <input class="form-check-input" formControlName="sturno" type="checkbox"  id="flexCheckChecked">
+                        <label class="form-check-label"  for="flexCheckChecked">
+                          solo turnos
+                        </label>
+                      
+                    </div>
                     <button type="submit" class="btn btn-primary"  [disabled]="!loginForm.valid">Submit</button>
                 </form>
             </div>
@@ -60,7 +67,7 @@
             </div>
     </div>
     
-    <div class="col">
+    <div class="col" *ngIf="!soloTurnos">
         <div class="card">
             <div class="card-body">
 

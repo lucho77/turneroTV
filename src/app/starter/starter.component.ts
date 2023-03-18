@@ -34,6 +34,8 @@ export class StarterComponent implements OnInit, AfterViewInit {
   widith:string;
   private turneroRef: Subscription = null;
   soloVideo: boolean;
+  soloTurnos: boolean;
+
   @ViewChild('videoPlayer') videoplayer: ElementRef;
 
   constructor(private reportdefService: ReportdefService, private sanitizer: DomSanitizer,
@@ -49,7 +51,8 @@ export class StarterComponent implements OnInit, AfterViewInit {
       username: ['', Validators.required],
       password: ['', Validators.compose([Validators.required,Validators.minLength(4), Validators.maxLength(24)])],
       gla:[''],
-      sla:['']
+      sla:[''],
+      sturno:['']
     });
   }
  
@@ -70,32 +73,46 @@ export class StarterComponent implements OnInit, AfterViewInit {
   getTurnosAndVideos(){
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
+    const sTurno = JSON.parse(localStorage.getItem('soloTurno'));
+    if(sTurno===false){
 
-    if(currentUser !== undefined && currentUser.sla ===false){
-      this.videoplayer.nativeElement.widith='600px';
 
-      this.soloVideo = false;
-      this.subscription = this.everyFiveSeconds.subscribe(() => {
-        console.log('traigo los datos turno cada 10 segundos');
-        this.consultarTurnos(this.putDataFinder('devuelveTurnero'));
-      },
-      error => {
-      console.log(error);
-      });
+        if(currentUser !== undefined && currentUser.sla ===false){
+          this.videoplayer.nativeElement.widith='600px';
+
+          this.soloVideo = false;
+          this.subscription = this.everyFiveSeconds.subscribe(() => {
+            console.log('traigo los datos turno cada 10 segundos');
+            this.consultarTurnos(this.putDataFinder('devuelveTurnero'));
+          },
+          error => {
+          console.log(error);
+          });
+      }else{
+        this.soloVideo = true;
+        this.videoplayer.nativeElement.widith='1200px';
+      }
+
+
+        this.subscription2 = this.everyTenMinutes.subscribe(() => {
+          console.log('traigo videos cada 10 minutos');
+          this.consultarVideos(this.putDataFinder('devuelveVideos'));
+        },
+          error => {
+          console.log(error);
+        });
+      
   }else{
-    this.soloVideo = true;
-    this.videoplayer.nativeElement.widith='1200px';
-  }
-
-    this.subscription2 = this.everyTenMinutes.subscribe(() => {
-      console.log('traigo videos cada 10 minutos');
-      this.consultarVideos(this.putDataFinder('devuelveVideos'));
+    this.soloTurnos=true;
+    this.subscription = this.everyFiveSeconds.subscribe(() => {
+      console.log('traigo los datos turno cada 10 segundos');
+      this.consultarTurnos(this.putDataFinder('devuelveTurnero'));
     },
-      error => {
-      console.log(error);
+    error => {
+    console.log(error);
     });
-
-  }
+}
+} 
   getLogin(){
     this.reportdefService.login( this.f.username.value, this.f.password.value)
     .subscribe(
@@ -105,6 +122,7 @@ export class StarterComponent implements OnInit, AfterViewInit {
         this.user.gla = this.f.gla.value;
         this.user.sla = this.f.sla.value?true:false;
         localStorage.setItem('currentUser', JSON.stringify(this.user));
+        localStorage.setItem('soloTurno', JSON.stringify(this.f.sturno.value?true:false));
         this.getTurnosAndVideos();
     } ,
     error => {
@@ -215,7 +233,7 @@ export class StarterComponent implements OnInit, AfterViewInit {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
     const finder = {} as FinderParamsDTO;
-    //finder.methodName = 'devuelveTurnero';
+    //finder.methodName = 'c';
     finder.methodName = method;
     finder.typeMethodFinder = true;
     const ger = {} as FinderGenericDTO;
