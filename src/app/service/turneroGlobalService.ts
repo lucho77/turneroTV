@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class TurneroGlobalService {
     constructor() { }
-    private turneroChangedSource = new Subject<void>();
+    private turneroChangedSource = new Subject<boolean>();
     public turneroChanged$ = this.turneroChangedSource.asObservable();
     private turne: boolean;
     private detalle: string;

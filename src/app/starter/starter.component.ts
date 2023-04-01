@@ -52,7 +52,7 @@ export class StarterComponent implements OnInit, AfterViewInit {
       password: ['', Validators.compose([Validators.required,Validators.minLength(4), Validators.maxLength(24)])],
       gla:[''],
       sla:[''],
-      sturno:['']
+      sturno:['1']
     });
   }
  
