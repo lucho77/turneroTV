@@ -78,7 +78,9 @@ export class StarterComponent implements OnInit, AfterViewInit {
 
 
         if(currentUser !== undefined && currentUser.sla ===false){
-          this.videoplayer.nativeElement.widith='600px';
+          if(this.videoplayer!==undefined){
+            this.videoplayer.nativeElement.widith='600px';
+          }
 
           this.soloVideo = false;
           this.subscription = this.everyFiveSeconds.subscribe(() => {
@@ -90,7 +92,9 @@ export class StarterComponent implements OnInit, AfterViewInit {
           });
       }else{
         this.soloVideo = true;
-        this.videoplayer.nativeElement.widith='1200px';
+        if(this.videoplayer!==undefined){
+          this.videoplayer.nativeElement.widith='600px';
+        }
       }
 
 
@@ -197,6 +201,10 @@ export class StarterComponent implements OnInit, AfterViewInit {
             this.devuelveUrl(response.data[i][1].value);
           }
           this.cargado = true;
+          if(this.videoplayer!==undefined){
+            this.videoplayer.nativeElement.widith='600px';
+          }
+  
          // this.src = 'assets/video/video2.mp4'
           if(this.currentVideo === undefined){
             this.startPlaylistVdo(0,this.videos[0]);
