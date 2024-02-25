@@ -12,20 +12,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
-import { FullComponent } from './layouts/full/full.component';
-import { BlankComponent } from './layouts/blank/blank.component';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 
-import { VerticalNavigationComponent } from './shared/vertical-header/vertical-navigation.component';
-import { VerticalSidebarComponent } from './shared/vertical-sidebar/vertical-sidebar.component';
-import { BreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
-import { HorizontalNavigationComponent } from './shared/horizontal-header/horizontal-navigation.component';
-import { HorizontalSidebarComponent } from './shared/horizontal-sidebar/horizontal-sidebar.component';
 
-import { Approutes } from './app-routing.module';
+import { Approutes, AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SpinnerComponent } from './shared/spinner.component';
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -36,6 +28,14 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { ToastrModule } from 'ngx-toastr';
+import {VgCoreModule} from '@videogular/ngx-videogular/core';
+import {VgControlsModule} from '@videogular/ngx-videogular/controls';
+import {VgOverlayPlayModule} from '@videogular/ngx-videogular/overlay-play';
+import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
+import { LoginComponent } from './login/login.component';
+import { ConnectComponent } from './login/connect.component';
+import { StarterComponent } from './starter/starter.component';
+import {DialogModule} from 'primeng/dialog';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -50,27 +50,20 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 @NgModule({
   declarations: [
-    AppComponent,
-    SpinnerComponent,
-    FullComponent,
-    BlankComponent,
-    VerticalNavigationComponent,
-    BreadcrumbComponent,
-    VerticalSidebarComponent,
-    HorizontalNavigationComponent,
-    HorizontalSidebarComponent
+    AppComponent,LoginComponent,ConnectComponent,StarterComponent
   ],
   imports: [
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,    
-    FormsModule,
-    FeatherModule.pick(allIcons),
+    FormsModule,AppRoutingModule,
+    VgCoreModule, VgControlsModule,
+    VgOverlayPlayModule,
+    VgBufferingModule,    FeatherModule.pick(allIcons),
     HttpClientModule,
-    NgbModule,
+    NgbModule,DialogModule,
     FeatherModule,
-    RouterModule.forRoot(Approutes),
     PerfectScrollbarModule,
     ToastrModule.forRoot(), // ToastrModule added
 

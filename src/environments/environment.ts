@@ -4,7 +4,11 @@
 
 export const environment = {
   production: false,
-  api:'api/framework/dina'
+  api:'api/framework/dina',
+  user: 'totemincor',
+  password:  'totemincor',
+  gla:  682
+
 };
 
 /*

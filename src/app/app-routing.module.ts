@@ -1,19 +1,22 @@
-import { Routes } from '@angular/router';
-import { FullComponent } from './layouts/full/full.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ConnectComponent } from './login/connect.component';
+import { LoginComponent } from './login/login.component';
+import { StarterComponent } from './starter/starter.component';
 export const Approutes: Routes = [
-  {
-    path: '',
-    component: FullComponent,
-    children: [
-      { path: '', redirectTo: '/starter', pathMatch: 'full' },
-      {
-        path: 'starter',
-        loadChildren: () => import('./starter/starter.module').then(m => m.StarterModule)
-      }
-    ]
-  },
-  {
-    path: '**',
-    redirectTo: '/starter'
-  }
+
+    { path: 'login', component: LoginComponent },
+    { path: 'connect/:usuario/:pass/:idGrupReal', component: ConnectComponent },
+    { path: 'starter', component: StarterComponent },
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+
 ];
+
+@NgModule({
+  imports: [RouterModule.forRoot(Approutes,{useHash: true})],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+  

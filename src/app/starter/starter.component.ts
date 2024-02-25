@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, timer } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { FinderGenericDTO } from '../model/finderGenericDTO';
 import { FinderParamsDTO } from '../model/finderParamsDTO';
 import { FormdataReportdef } from '../model/formdata';
@@ -29,7 +30,6 @@ export class StarterComponent implements OnInit, AfterViewInit {
   cargado = false;
   src:any;
   turnero:boolean;
-  loginForm: FormGroup;
   msg: string;
   widith:string;
   private turneroRef: Subscription = null;
@@ -39,35 +39,13 @@ export class StarterComponent implements OnInit, AfterViewInit {
   @ViewChild('videoPlayer') videoplayer: ElementRef;
 
   constructor(private reportdefService: ReportdefService, private sanitizer: DomSanitizer,
-    private formBuilder: FormBuilder, 
     public tService:TurneroGlobalService,private toastr: ToastrService) {
     this.subtitle = 'This is some text within a card block.';
       this.soloVideo = false;
       this.widith = '600px';
   }
 
-  private cargarForm() {
-    this.loginForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.compose([Validators.required,Validators.minLength(4), Validators.maxLength(24)])],
-      gla:[''],
-      sla:[''],
-      sturno:['1']
-    });
-  }
- 
 
-  onSubmit() {
-    console.log(this.f);
-    if(!this.f.sla.value && !this.f.gla.value ){
-      this.toastr.error('debe completar un grupo de lugar de atencion o marcar la casilla sin lugar de atencion');
-      return;
-    }
-      this.getLogin();
-      
-  }
-
-  get f() { return this.loginForm.controls; }
 
 
   getTurnosAndVideos(){
@@ -117,35 +95,7 @@ export class StarterComponent implements OnInit, AfterViewInit {
     });
 }
 } 
-  getLogin(){
-    this.reportdefService.login( this.f.username.value, this.f.password.value)
-    .subscribe(
-      response => {
-        this.turnero = true;
-        this.user = response;
-        this.user.gla = this.f.gla.value;
-        this.user.sla = this.f.sla.value?true:false;
-        localStorage.setItem('currentUser', JSON.stringify(this.user));
-        localStorage.setItem('soloTurno', JSON.stringify(this.f.sturno.value?true:false));
-        this.getTurnosAndVideos();
-    } ,
-    error => {
-    console.log(error);
-    if (error.error.errorBusiness) {
-      // es un error
-      this.msg = error.error.mensaje;
-
-      return;
-  } else {
-      this.msg = 'error grave al tratar de loguearse, vuelva a intentarlo';
-      return;
-
-  }
-
-  });
-
-
-  }
+ 
 
 
   ngOnInit(): void {
@@ -153,7 +103,6 @@ export class StarterComponent implements OnInit, AfterViewInit {
     const current = localStorage.getItem('currentUser');
     if(current == undefined){
         this.turnero = false
-        this.cargarForm();
     }else{
       this.user = JSON.parse(current);
       this.turnero = true;
@@ -161,7 +110,6 @@ export class StarterComponent implements OnInit, AfterViewInit {
     }
     this.turneroRef = this.tService.turneroChanged$.subscribe(() => {
       this.turnero = this.tService.getTurne();
-      this.cargarForm();
       this.subscription!.unsubscribe();
       this.subscription2!.unsubscribe();
   
@@ -249,8 +197,8 @@ export class StarterComponent implements OnInit, AfterViewInit {
 
     const listNew: FormdataReportdef[] = [];
     const param = {} as FormdataReportdef;
-    param.valueNew = currentUser.gla||662;  
-    param.value = currentUser.gla||662;
+    param.valueNew = currentUser.gla||environment.gla;  
+    param.value = currentUser.gla||environment.gla;
     param.name = 'p1';
     param.type = 'java.lang.Long';
     param.entity = false;
