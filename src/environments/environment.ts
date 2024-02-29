@@ -7,7 +7,8 @@ export const environment = {
   api:'api/framework/dina',
   user: 'totemincor',
   password:  'totemincor',
-  gla:  682
+  gla:  682,
+  timeToGetData:60000 //miliseconds
 
 };
 

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { RefreshTokenResponse } from '../model/refreshTokenResponse';
+import { RefreshToken } from '../model/refreshToken';
+import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
     devolverProyecto () {
@@ -21,5 +23,13 @@ export class AuthenticationService {
     version() {
         console.log('obteniendo version Server');
         return this.http.get<any>(`${this.devolverProyecto()}/versionServer/`);
+    }
+    refreshToken(user:any) : Observable<RefreshTokenResponse>{
+        let data = new RefreshToken; 
+        data.username = user.username;
+        data.tokenExpired = user.token;
+        data.refreshToken = user.refreshToken;
+        data.idUsuarioUra = user.idUsuarioUra;
+        return this.http.post<RefreshTokenResponse>(`${this.devolverProyecto()}/refreshToken/`,data);
     }
 }

@@ -23,7 +23,7 @@ export class StarterComponent implements OnInit, AfterViewInit {
   subscription: Subscription | undefined;
   subscription2: Subscription | undefined;
   activeIndex = 0;
-  everyFiveSeconds: Observable<number> = timer(0, 10000);
+  everyFiveSeconds: Observable<number> = timer(0, environment.timeToGetData);
   everyTenMinutes: Observable<number> = timer(0, 600000);
   currentVideo:any;
   type='video/mp4';
@@ -117,9 +117,18 @@ export class StarterComponent implements OnInit, AfterViewInit {
 
   }
   ngOnDestroy() {
-    this.subscription!.unsubscribe();
-    this.subscription2!.unsubscribe();
-    this.turneroRef.unsubscribe();
+    if(this.subscription){
+      this.subscription!.unsubscribe();
+
+    }
+    if(this.subscription2){
+      this.subscription2!.unsubscribe();
+
+    }
+    if(this.turneroRef){
+      this.turneroRef!.unsubscribe();
+
+    }
 
   }
 

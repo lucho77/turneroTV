@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit{
       const l= JSON.parse(login);
       u=l.user;
       p=l.password;
-
+      g=l.idGrupReal;
     }
     const user:any = await this.connect(u,p,g);
     this.router.navigate(['/starter']);

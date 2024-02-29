@@ -36,6 +36,7 @@ import { LoginComponent } from './login/login.component';
 import { ConnectComponent } from './login/connect.component';
 import { StarterComponent } from './starter/starter.component';
 import {DialogModule} from 'primeng/dialog';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -83,6 +84,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG},
       { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+      { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+
       
 
     
